@@ -1,0 +1,19 @@
+{
+  "name": "solana-course",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx nodemon ./transfer.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "resolveJsonModule": true,
+  "esModuleInterop": true,
+  "license": "ISC",
+  "dependencies": {
+    "@solana/web3.js": "^1.66.2",
+    "nodemon": "^2.0.20"
+  }
+}
