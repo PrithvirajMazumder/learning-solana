@@ -12,6 +12,10 @@ import {
 } from "@solana/web3.js";
 import { getLatestBlockhash } from "./helpers/blockhas";
 import secret from "./configs/wallet.json";
+import {
+  getAmmountToTransfer,
+  getReceiverAddress,
+} from "./helpers/environment";
 
 const OWNER_SECRET: number[] = secret;
 const OWNER_KEYPAIR = Keypair.fromSecretKey(Uint8Array.from(OWNER_SECRET));
@@ -56,14 +60,12 @@ const transferSol = async (
 };
 
 (async () => {
-  const receiver: PublicKey = new PublicKey(
-    "H7DA2GPQHy9nKYCMFyf93AeFqnd9em5Czb9u6TMQpqMM"
-  );
-  const AMOUNT: number = 1;
-  console.log(`\nSender public key: ${OWNER_KEYPAIR.publicKey.toString()}`);
-  console.log(`\nReceiver public key: ${receiver.toString()}`);
-  console.log("\n------------------ Transfer started ------------------");
   try {
+    const receiver: PublicKey = new PublicKey(getReceiverAddress());
+    const AMOUNT: number = getAmmountToTransfer();
+    console.log(`\nSender public key: ${OWNER_KEYPAIR.publicKey.toString()}`);
+    console.log(`\nReceiver public key: ${receiver.toString()}`);
+    console.log("\n------------------ Transfer started ------------------");
     const transactionId: string = await transferSol(
       OWNER_KEYPAIR,
       receiver,
