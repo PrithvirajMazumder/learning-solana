@@ -1,4 +1,5 @@
 import {
+  clusterApiUrl,
   Connection,
   Keypair,
   LAMPORTS_PER_SOL,
@@ -10,15 +11,12 @@ import {
   TransferParams,
   VersionedTransaction,
 } from "@solana/web3.js";
-import { getLatestBlockhash } from "./helpers/blockhas";
-import secret from "./configs/wallet.json";
-import {
-  getAmmountToTransfer,
-  getReceiverAddress,
-} from "./helpers/environment";
+import { getLatestBlockhash } from "../helpers/blockhas";
+import { getAmmountToTransfer } from "../helpers/environment";
+import { createSolanaExplorerViewLink } from "../helpers/url";
+import WalletService from "../services/wallet.service";
 
-const OWNER_SECRET: number[] = secret;
-const OWNER_KEYPAIR = Keypair.fromSecretKey(Uint8Array.from(OWNER_SECRET));
+const OWNER_KEYPAIR = WalletService.getKeyPair();
 
 //just to view public key and secret key
 (() => {
@@ -26,8 +24,7 @@ const OWNER_KEYPAIR = Keypair.fromSecretKey(Uint8Array.from(OWNER_SECRET));
   console.log(`Public key: ${publicKey} \n Secret Key: ${secretKey}`);
 })();
 
-const endPoint: string = "https://api.devnet.solana.com";
-const connection: Connection = new Connection(endPoint);
+const connection: Connection = new Connection(clusterApiUrl("devnet"));
 
 const transferSol = async (
   sender: Keypair,
@@ -61,7 +58,7 @@ const transferSol = async (
 
 (async () => {
   try {
-    const receiver: PublicKey = new PublicKey(getReceiverAddress());
+    const receiver: PublicKey = WalletService.getReceiverPubKey();
     const AMOUNT: number = getAmmountToTransfer();
     console.log(`\nSender public key: ${OWNER_KEYPAIR.publicKey.toString()}`);
     console.log(`\nReceiver public key: ${receiver.toString()}`);
@@ -71,9 +68,7 @@ const transferSol = async (
       receiver,
       AMOUNT
     );
-    console.info(
-      `Transaction successfull!\nYou can view this transaction at: https://explorer.solana.com/tx/${transactionId}?cluster=devnet`
-    );
+    console.info(createSolanaExplorerViewLink(transactionId));
   } catch (error) {
     console.error(error);
   }

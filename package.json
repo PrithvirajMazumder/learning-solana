@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx nodemon ./transfer.ts",
+    "dev": "npx nodemon ./src/ping.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
